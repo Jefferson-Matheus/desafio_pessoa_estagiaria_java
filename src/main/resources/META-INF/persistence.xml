@@ -13,11 +13,11 @@
 			<property name="jakarta.persistence.jdbc.driver"
 				value="org.postgresql.Driver" />
 			<property name="jakarta.persistence.jdbc.url"
-				value="jdbc:postgresql://localhost:5432/seu_banco" />
+				value="jdbc:postgresql://localhost:5432/db_todo" />
 			<property name="jakarta.persistence.jdbc.user"
-				value="seu_usuario" />
+				value="postgres" />
 			<property name="jakarta.persistence.jdbc.password"
-				value="sua_senha" />
+				value="postgres" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.show_sql" value="true" />
 		</properties>
