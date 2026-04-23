@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Gerenciador de Tarefas</title>
+    <style>
+        .container { padding: 20px; max-width: 1000px; margin: auto; }
+        .grid-form { margin-bottom: 20px; }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <h:form id="formCadastro">
+            <p:growl id="msgs" showDetail="true" />
+
+            <p:panel header="Cadastrar Nova Tarefa">
+                <h:panelGrid columns="4" cellpadding="7" styleClass="grid-form">
+                    
+                    <p:outputLabel for="titulo" value="Título:" />
+                    <p:inputText id="titulo" value="#{taskController.task.title}" required="true" />
+
+                    <p:outputLabel for="responsavel" value="Responsável:" />
+                    <p:selectOneMenu id="responsavel" value="#{taskController.task.responsible}" 
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="Selecione um..." itemValue="" />
+                        <f:selectItems value="#{taskController.resposibleList}" var="r" 
+                                       itemLabel="#{r.name}" itemValue="#{r}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="descricao" value="Descrição:" />
+                    <p:inputTextarea id="descricao" value="#{taskController.task.description}" required="true" />
+
+                    <p:outputLabel for="prioridade" value="Prioridade:" />
+                    <p:selectOneMenu id="prioridade" value="#{taskController.task.priorityLevel}" required="true">
+                        <f:selectItem itemLabel="Selecione..." itemValue="" />
+                        <f:selectItems value="#{taskController.priorities}" var="p" 
+                                       itemLabel="#{p.description}" itemValue="#{p}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="deadline" value="Deadline:" />
+                    <p:datePicker id="deadline" value="#{taskController.task.deadline}" 
+                                  showIcon="true" pattern="dd/MM/yyyy" required="true" />
+
+                </h:panelGrid>
+
+                <p:commandButton value="Cadastrar" action="#{taskController.addTask}" 
+                                 update="@form :formTabela:tabelaTasks" 
+                                 icon="pi pi-check" styleClass="ui-button-primary" />
+            </p:panel>
+        </h:form>
+
+        <h:form id="formTabela">
+            <p:dataTable id="tabelaTasks" value="#{taskController.tasksList}" var="t" 
+                         styleClass="mt-4" emptyMessage="Nenhuma tarefa pendente."
+                         stripedRows="true">
+                
+                <p:column headerText="ID" width="50">
+                    <h:outputText value="#{t.id}" />
+                </p:column>
+
+                <p:column headerText="Título">
+                    <h:outputText value="#{t.title}" />
+                </p:column>
+
+                <p:column headerText="Responsável">
+                    <h:outputText value="#{t.responsible.name}" />
+                </p:column>
+
+                <p:column headerText="Prioridade">
+                    <h:outputText value="#{t.priorityLevel.description}" />
+                </p:column>
+
+                <p:column headerText="Deadline">
+                    <h:outputText value="#{t.deadline}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Ações" width="100">
+                    <p:commandButton icon="pi pi-trash" action="#{taskController.removeTask(t.id)}"
+                                     update="tabelaTasks :formCadastro:msgs"
+                                     styleClass="ui-button-danger ui-button-flat" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </div>
+</h:body>
+</html>
