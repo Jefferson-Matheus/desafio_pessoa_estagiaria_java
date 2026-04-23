@@ -38,7 +38,7 @@ public class TaskRepository {
 	}
 
 	public List<Task> listarPendentes() {
-		String jpql = "SELECT t FROM Task t WHERE t.status_task = enums.Status.EM_ANDAMENTO ORDER BY t.deadline ASC";
+		String jpql = "SELECT t FROM Task t WHERE t.statusTask = enums.Status.EM_ANDAMENTO ORDER BY t.id ASC";
 		return em.createQuery(jpql, Task.class).getResultList();
 	}
 }

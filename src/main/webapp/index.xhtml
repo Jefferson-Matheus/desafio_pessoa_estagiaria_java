@@ -1,13 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
 <h:head>
-	<title>Teste JSF 2026</title>
+    <title>Gerenciador de Responsáveis</title>
+    <style>
+        .container { padding: 20px; max-width: 800px; margin: auto; }
+        .mt-20 { margin-top: 20px; }
+    </style>
 </h:head>
+
 <h:body>
-	<h2>O servidor está rodando?</h2>
-	<h:outputText value="Se você está lendo isso, o JSF está funcionando!"
-		style="color: green; font-weight: bold;" />
-		<br></br>
-	<h:outputText value="ID da Sessão: #{session.id}" />
+    <div class="container">
+        <h:form id="formCadastro">
+            <p:growl id="msgs" showDetail="true" />
+
+            <p:panel header="Cadastrar Novo Responsável">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="nome" value="Nome:" />
+                    <p:inputText id="nome" value="#{responsibleController.responsible.name}" 
+                                 required="true" requiredMessage="O nome é obrigatório" />
+                    
+                    <p:commandButton value="Salvar" 
+                                     action="#{responsibleController.addResponsible()}" 
+                                     update="@form :formLista:tabelaResponsaveis" 
+                                     icon="pi pi-save" 
+                                     styleClass="ui-button-success" />
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+        <h:form id="formLista" styleClass="mt-20">
+            <p:dataTable id="tabelaResponsaveis" 
+                         value="#{responsibleController.listResponsibles}" 
+                         var="resp" 
+                         emptyMessage="Nenhum responsável cadastrado."
+                         stripedRows="true">
+                
+                <p:column headerText="ID" width="50">
+                    <h:outputText value="#{resp.id}" />
+                </p:column>
+
+                <p:column headerText="Nome do Responsável">
+                    <h:outputText value="#{resp.name}" />
+                </p:column>
+
+                <p:column headerText="Ações" width="100" style="text-align: center">
+                    <p:commandButton icon="pi pi-trash" 
+                                     action="#{responsibleController.removeResponsible(resp.id)}" 
+                                     update="@form :formCadastro:msgs"
+                                     process="@this"
+                                     styleClass="ui-button-danger ui-button-flat">
+                        <p:confirm header="Confirmação" message="Deseja excluir este responsável?" icon="pi pi-exclamation-triangle" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" />
+            </p:confirmDialog>
+        </h:form>
+    </div>
 </h:body>
 </html>
