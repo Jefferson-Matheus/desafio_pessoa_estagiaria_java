@@ -6,7 +6,7 @@ O primeiro passo foi criar a estrutura de pastas e o arquivo `module.xml` dentro
 
 ```Bash
 
-rm \-rf /home/jeffersonm/Downloads/wildfly-39.0.1.Final/modules/org/postgresql  
+rm -rf /home/jeffersonm/Downloads/wildfly-39.0.1.Final/modules/org/postgresql  
 ``` 
 
 * **Comando de Criação do Módulo:** Note que simplificamos as dependências para evitar conflitos com o Jakarta EE 10:
@@ -14,7 +14,7 @@ rm \-rf /home/jeffersonm/Downloads/wildfly-39.0.1.Final/modules/org/postgresql
 
 ```Bash
 
-./jboss-cli.sh \--command="module add \--name=org.postgresql \--resources=\<caminho\_jar\> \--dependencies=jakarta.transaction.api"
+./jboss-cli.sh --command="module add --name=org.postgresql --resources=<caminho_jar> --dependencies=jakarta.transaction.api"
 
 ``` 
 
@@ -28,7 +28,7 @@ Com o arquivo físico no lugar, precisamos dizer ao subsistema de conexões do W
 
 ```Bash
 
-./jboss-cli.sh \--connect \--command="/subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql,driver-class-name=org.postgresql.Driver)"
+./jboss-cli.sh --connect --command="/subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql,driver-class-name=org.postgresql.Driver)"
 
 ``` 
 
@@ -41,7 +41,7 @@ Este passo cria a "ponte" final entre o servidor e o seu banco de dados `db_todo
 * **Comando de Criação:**
 
 ```Bash
-./jboss-cli.sh \--connect \--command="data-source add \--name=PostgresDS \--jndi-name=java:jboss/datasources/PostgresDS \--driver-name=postgresql \--connection-url=jdbc:postgresql://localhost:5432/db\_todo \--user-name=\<seu\_usuario\> \--password=\<sua\_senha\>  \--enabled=true"
+./jboss-cli.sh --connect --command="data-source add --name=PostgresDS --jndi-name=java:jboss/datasources/PostgresDS --driver-name=postgresql --connection-url=jdbc:postgresql://localhost:5432/db\_todo --user-name=<seu_usuario> --password=<sua_senha\>  --enabled=true"
 ``` 
 
 ---
@@ -54,7 +54,7 @@ Para validar se o WildFly conseguia "conversar" com o PostgreSQL:
 
 ```Bash
 
-./jboss-cli.sh \--connect \--command="/subsystem=datasources/data-source=PostgresDS:test-connection-in-pool"
+./jboss-cli.sh --connect --command="/subsystem=datasources/data-source=PostgresDS:test-connection-in-pool"
 
 ``` 
 
