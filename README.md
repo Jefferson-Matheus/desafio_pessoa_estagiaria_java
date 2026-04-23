@@ -56,7 +56,7 @@ A aplicação foi desenvolvida atendendo aos seguintes requisitos:
 Crie um banco de dados chamado `db_todo` no seu PostgreSQL:
 
 ```SQL  
-  CREATE DATABASE db\_todo;
+  CREATE DATABASE db_todo;
 ```
 
 ### **2\. Configuração do Servidor (WildFly)**
@@ -76,7 +76,7 @@ O arquivo `.war` será gerado na pasta `target/`.
 
 ### **4\. Deploy**
 
-Mova o arquivo `.war` gerado para a pasta `standalone/deployments` do seu WildFly e inicie o servidor. Acesse: `http://localhost:8080/desafioEsigGroup-0.0.1-SNAPSHOT/`
+Mova o arquivo `.war` gerado para a pasta `standalone/deployments` do seu WildFly e inicie o servidor. Acesse: `http://localhost:8080/<nome_diretorio>-0.0.1-SNAPSHOT/`
 
 ---
 
