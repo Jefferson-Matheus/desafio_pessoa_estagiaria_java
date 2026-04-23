@@ -2,67 +2,92 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="jakarta.faces.core">
 
 <h:head>
-    <title>Gerenciador de Responsáveis</title>
+    <title>Sistema de Gestão - Home</title>
     <style>
-        .container { padding: 20px; max-width: 800px; margin: auto; }
-        .mt-20 { margin-top: 20px; }
+        body {
+            background-color: #f4f7f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .dashboard-container {
+            text-align: center;
+        }
+
+        .modules-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .module-card {
+            width: 300px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none !important;
+        }
+
+        .module-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+        }
+
+        .icon-container {
+            font-size: 4rem;
+            color: #3f51b5;
+            margin-bottom: 20px;
+        }
+
+        .module-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .module-desc {
+            color: #666;
+            margin-top: 10px;
+        }
     </style>
 </h:head>
 
 <h:body>
-    <div class="container">
-        <h:form id="formCadastro">
-            <p:growl id="msgs" showDetail="true" />
+    <div class="dashboard-container">
+        <h:form>
+            <h1 style="color: #2c3e50; font-size: 2.5rem;">Bem-vindo ao Sistema De Gestão De Tarefas</h1>
+            <p style="color: #7f8c8d;">Selecione um módulo para começar</p>
 
-            <p:panel header="Cadastrar Novo Responsável">
-                <h:panelGrid columns="3" cellpadding="5">
-                    <p:outputLabel for="nome" value="Nome:" />
-                    <p:inputText id="nome" value="#{responsibleController.responsible.name}" 
-                                 required="true" requiredMessage="O nome é obrigatório" />
-                    
-                    <p:commandButton value="Salvar" 
-                                     action="#{responsibleController.addResponsible()}" 
-                                     update="@form :formLista:tabelaResponsaveis" 
-                                     icon="pi pi-save" 
-                                     styleClass="ui-button-success" />
-                </h:panelGrid>
-            </p:panel>
-        </h:form>
-
-        <h:form id="formLista" styleClass="mt-20">
-            <p:dataTable id="tabelaResponsaveis" 
-                         value="#{responsibleController.listResponsibles}" 
-                         var="resp" 
-                         emptyMessage="Nenhum responsável cadastrado."
-                         stripedRows="true">
+            <div class="modules-grid">
                 
-                <p:column headerText="ID" width="50">
-                    <h:outputText value="#{resp.id}" />
-                </p:column>
+                <h:commandLink action="responsible.xhtml?faces-redirect=true" styleClass="module-card">
+                    <p:card>
+                        <div class="icon-container">
+                            <i class="pi pi-users"></i>
+                        </div>
+                        <div class="module-title">Responsáveis</div>
+                        <p class="module-desc">Cadastre e gerencie os membros da equipe que executarão as tarefas.</p>
+                    </p:card>
+                </h:commandLink>
 
-                <p:column headerText="Nome do Responsável">
-                    <h:outputText value="#{resp.name}" />
-                </p:column>
+                <h:commandLink action="task.xhtml?faces-redirect=true" styleClass="module-card">
+                    <p:card>
+                        <div class="icon-container" style="color: #4caf50;">
+                            <i class="pi pi-list"></i>
+                        </div>
+                        <div class="module-title">Tarefas</div>
+                        <p class="module-desc">Visualize, crie e controle o status e a prioridade das atividades.</p>
+                    </p:card>
+                </h:commandLink>
 
-                <p:column headerText="Ações" width="100" style="text-align: center">
-                    <p:commandButton icon="pi pi-trash" 
-                                     action="#{responsibleController.removeResponsible(resp.id)}" 
-                                     update="@form :formCadastro:msgs"
-                                     process="@this"
-                                     styleClass="ui-button-danger ui-button-flat">
-                        <p:confirm header="Confirmação" message="Deseja excluir este responsável?" icon="pi pi-exclamation-triangle" />
-                    </p:commandButton>
-                </p:column>
-            </p:dataTable>
-
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" />
-            </p:confirmDialog>
+            </div>
         </h:form>
     </div>
 </h:body>

@@ -14,7 +14,7 @@ public class ResponsibleRepository {
 	private EntityManager em;
 
 	@Transactional 
-	public void createResponsible(Responsible responsible) {
+	public void saveResponsible(Responsible responsible) {
 		if (responsible.getId() == null) {
 			em.persist(responsible);
 		} else {
@@ -23,7 +23,7 @@ public class ResponsibleRepository {
 	}
 
 	public List<Responsible> getAllResponsibles() {
-		return em.createQuery("SELECT r FROM Responsible r", Responsible.class).getResultList();
+		return em.createQuery("SELECT r FROM Responsible r ORDER BY r.id ASC", Responsible.class).getResultList();
 	}
 
 	public Responsible findById(Long id) {
