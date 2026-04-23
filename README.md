@@ -10,7 +10,7 @@ A aplicação foi desenvolvida atendendo aos seguintes requisitos:
 
 * **\[A\] JavaServer Faces (JSF 4.0):** Utilizado para a criação da interface dinâmica.  
 * **\[B\] PostgreSQL:** Banco de dados relacional utilizado para persistência.  
-* **\[C\] JPA (Hibernate):** Implementação de persistência para mapeamento objeto-relacional (ORM).  
+* **\[C\] JPA:** Implementação de persistência para mapeamento objeto-relacional (ORM).  
 * **\[F\] PrimeFaces:** Diferencial utilizado para componentes de UI ricos e responsivos.  
 * **\[F\] CDI / Weld:** Injeção de dependência para maior desacoplamento e testabilidade.  
 * **\[F\] OmniFaces:** Biblioteca utilitária para facilitar o ciclo de vida do JSF.
@@ -86,8 +86,7 @@ Embora o núcleo da aplicação esteja funcional, as seguintes melhorias estão 
 
 * **☁️ Publicação em Ambiente Cloud (Deploy):** Configuração de pipeline para publicação automática no Heroku, Render ou AWS.  
 * **🎨 UI/UX Refinado:** Implementação de `Growl` e `Messages` do PrimeFaces mais detalhados para confirmar ações (Sucesso ao salvar, avisos de erro, etc) e melhorias na responsividade mobile.  
-* **🧪 Testes Unitários:** Implementação de cobertura de testes com **JUnit 5** e **Mockito** para validar as regras de negócio das entidades e DAOs.  
-* **🔄 Auditoria:** Implementação do Hibernate Envers para rastrear mudanças nas tarefas.
+* **🧪 Testes Unitários:** Implementação de cobertura de testes com **JUnit 5** e **Mockito** para validar as regras de negócio das entidades e DAOs.
 
 ---
 
