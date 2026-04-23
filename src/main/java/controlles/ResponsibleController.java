@@ -35,15 +35,23 @@ public class ResponsibleController implements Serializable {
 		return listResponsibles;
 	}
 
-	public void addResponsible() {
-		responsibleRepository.createResponsible(responsible);
+	public void save() {
+		responsibleRepository.saveResponsible(responsible);
 		responsible = new Responsible();
 		list();
 	}
 
 	public void removeResponsible(Long id) {
 		responsibleRepository.deleteResponsible(id);
-		listAll();
+		list();
+	}
+	
+	public void prepareEdit(Responsible r) {
+        this.responsible = r;
+    }
+	
+	public void cancel() {
+		responsible = new Responsible();
 	}
 
 	public ResponsibleRepository getResponsibleRepository() {

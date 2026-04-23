@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Gerenciador de Responsáveis</title>
+	<style>
+.container {
+	padding: 20px;
+	max-width: 800px;
+	margin: auto;
+}
+
+.mt-20 {
+	margin-top: 20px;
+}
+</style>
+</h:head>
+
+<h:body>
+	<div class="container">
+		<h:form id="formNav">
+			<p:toolbar styleClass="mb-4"
+				style="border: none; background: transparent; padding-left: 0;">
+				<p:toolbarGroup>
+					<p:button value="Dashboard" icon="pi pi-home" outcome="index"
+						styleClass="ui-button-secondary ui-button-flat" />
+				</p:toolbarGroup>
+			</p:toolbar>
+		</h:form>
+
+		<h:form id="formCadastro">
+			<p:growl id="msgs" showDetail="true" />
+
+			<p:panel
+				header="#{responsibleController.responsible.id == null ? 'Cadastrar Novo Responsável' : 'Editar Responsável'}">
+				<h:panelGrid columns="4" cellpadding="5">
+					<p:outputLabel for="nome" value="Nome:" style="font-weight: bold" />
+					<p:inputText id="nome"
+						value="#{responsibleController.responsible.name}" required="true"
+						requiredMessage="O nome é obrigatório" />
+
+					<p:commandButton
+						value="#{responsibleController.responsible.id == null ? 'Salvar' : 'Atualizar'}"
+						action="#{responsibleController.save()}"
+						update="@form :formLista:tabelaResponsaveis" icon="pi pi-check"
+						styleClass="ui-button-success" />
+
+					<p:commandButton value="Cancelar"
+						action="#{responsibleController.cancel()}" update="@form"
+						process="@this" icon="pi pi-times"
+						rendered="#{responsibleController.responsible.id != null}"
+						styleClass="ui-button-secondary ui-button-flat" />
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+
+		<h:form id="formLista" styleClass="mt-20">
+			<p:dataTable id="tabelaResponsaveis"
+				value="#{responsibleController.listResponsibles}" var="resp"
+				emptyMessage="Nenhum responsável cadastrado." stripedRows="true"
+				paginator="true" rows="10" paginatorPosition="bottom">
+
+				<p:column headerText="ID" width="50" style="text-align: center">
+					<h:outputText value="#{resp.id}" />
+				</p:column>
+
+				<p:column headerText="Nome do Responsável">
+					<h:outputText value="#{resp.name}" />
+				</p:column>
+
+				<p:column headerText="Ações" width="150" style="text-align: center">
+					<p:commandButton icon="pi pi-pencil"
+						action="#{responsibleController.prepareEdit(resp)}"
+						update=":formCadastro" process="@this"
+						styleClass="ui-button-warning ui-button-flat" title="Editar" />
+
+					<p:commandButton icon="pi pi-trash"
+						action="#{responsibleController.removeResponsible(resp.id)}"
+						update="@form :formCadastro:msgs" process="@this"
+						styleClass="ui-button-danger ui-button-flat" title="Excluir">
+						<p:confirm header="Confirmação"
+							message="Deseja excluir #{resp.name}?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				responsive="true" width="350">
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no ui-button-flat" />
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" />
+			</p:confirmDialog>
+		</h:form>
+	</div>
+</h:body>
+</html>
