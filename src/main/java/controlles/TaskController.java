@@ -35,6 +35,7 @@ public class TaskController implements Serializable {
 	@PostConstruct
 	public void init() {
 		list();
+		this.statusFilter = enums.Status.EM_ANDAMENTO;
 	}
 
 	public void list() {

@@ -55,7 +55,7 @@
 						<p:outputLabel for="f_status" value="Status:" />
 						<p:selectOneMenu id="f_status"
 							value="#{taskController.statusFilter}">
-							<f:selectItem itemLabel="Todos" itemValue="#{null}" />
+							<f:selectItem itemLabel="#{taskController.statusFilter}" itemValue="#{taskController.statusFilter}" />
 							<f:selectItems value="#{taskController.statuses}" var="s"
 								itemLabel="#{s.description}" itemValue="#{s}" />
 						</p:selectOneMenu>

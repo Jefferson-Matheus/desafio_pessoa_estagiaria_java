@@ -41,7 +41,7 @@ public class TaskRepository {
 	}
 
 	public List<Task> listAll() {
-		String jpql = "SELECT t FROM Task t ORDER BY t.id ASC";
+		String jpql = "SELECT t FROM Task t WHERE t.statusTask = enums.Status.EM_ANDAMENTO ORDER BY t.id ASC";
 		return em.createQuery(jpql, Task.class).getResultList();
 	}
 
