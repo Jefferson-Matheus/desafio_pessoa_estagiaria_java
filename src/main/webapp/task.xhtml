@@ -1,93 +1,164 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core" xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>Gerenciador de Tarefas</title>
-    <style>
-        .container { padding: 20px; max-width: 1000px; margin: auto; }
-        .grid-form { margin-bottom: 20px; }
-    </style>
+	<title>Gerenciador de Tarefas</title>
+	<style>
+.container {
+	padding: 20px;
+	max-width: 1000px;
+	margin: auto;
+}
+
+.grid-form {
+	margin-bottom: 20px;
+}
+</style>
 </h:head>
 
 <h:body>
-    <div class="container">
-        <h:form id="formCadastro">
-            <p:growl id="msgs" showDetail="true" />
+	<div class="container"
+		style="max-width: 1200px; margin: auto; padding: 20px;">
 
-            <p:panel header="Cadastrar Nova Tarefa">
-                <h:panelGrid columns="4" cellpadding="7" styleClass="grid-form">
-                    
-                    <p:outputLabel for="titulo" value="Título:" />
-                    <p:inputText id="titulo" value="#{taskController.task.title}" required="true" />
+		<h:form id="formNav">
+			<p:toolbar styleClass="mb-4">
+				<p:toolbarGroup>
+					<p:button value="Dashboard" icon="pi pi-home" outcome="index"
+						styleClass="ui-button-secondary ui-button-flat" />
+				</p:toolbarGroup>
+			</p:toolbar>
+		</h:form>
 
-                    <p:outputLabel for="responsavel" value="Responsável:" />
-                    <p:selectOneMenu id="responsavel" value="#{taskController.task.responsible}" 
-                                     converter="omnifaces.SelectItemsConverter">
-                        <f:selectItem itemLabel="Selecione um..." itemValue="" />
-                        <f:selectItems value="#{taskController.resposibleList}" var="r" 
-                                       itemLabel="#{r.name}" itemValue="#{r}" />
-                    </p:selectOneMenu>
+		<p:accordionPanel widgetVar="basic" styleClass="mb-4">
+			<p:tab title="Filtros de Busca">
+				<h:form id="formFiltros">
+					<h:panelGrid columns="7" cellpadding="5">
+						<p:outputLabel for="f_id" value="ID:" />
+						<p:inputText id="f_id" value="#{taskController.idFilter}" size="5" />
 
-                    <p:outputLabel for="descricao" value="Descrição:" />
-                    <p:inputTextarea id="descricao" value="#{taskController.task.description}" required="true" />
+						<p:outputLabel for="f_texto" value="Título/Desc:" />
+						<p:inputText id="f_texto"
+							value="#{taskController.titleDescriptionFilter}"
+							placeholder="Buscar..." />
 
-                    <p:outputLabel for="prioridade" value="Prioridade:" />
-                    <p:selectOneMenu id="prioridade" value="#{taskController.task.priorityLevel}" required="true">
-                        <f:selectItem itemLabel="Selecione..." itemValue="" />
-                        <f:selectItems value="#{taskController.priorities}" var="p" 
-                                       itemLabel="#{p.description}" itemValue="#{p}" />
-                    </p:selectOneMenu>
+						<p:outputLabel for="f_resp" value="Responsável:" />
+						<p:selectOneMenu id="f_resp"
+							value="#{taskController.responsibleFilter}"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItem itemLabel="Todos" itemValue="#{null}" />
+							<f:selectItems value="#{taskController.resposibleList}" var="r"
+								itemLabel="#{r.name}" itemValue="#{r}" />
+						</p:selectOneMenu>
 
-                    <p:outputLabel for="deadline" value="Deadline:" />
-                    <p:datePicker id="deadline" value="#{taskController.task.deadline}" 
-                                  showIcon="true" pattern="dd/MM/yyyy" required="true" />
+						<p:outputLabel for="f_status" value="Status:" />
+						<p:selectOneMenu id="f_status"
+							value="#{taskController.statusFilter}">
+							<f:selectItem itemLabel="Todos" itemValue="#{null}" />
+							<f:selectItems value="#{taskController.statuses}" var="s"
+								itemLabel="#{s.description}" itemValue="#{s}" />
+						</p:selectOneMenu>
 
-                </h:panelGrid>
+						<p:commandButton value="Filtrar" action="#{taskController.list()}"
+							update=":formTabela:tabelaTasks" icon="pi pi-search" />
+						<p:commandButton value="Limpar"
+							action="#{taskController.clearFilters()}"
+							update="@form :formTabela:tabelaTasks" icon="pi pi-filter-slash"
+							styleClass="ui-button-flat" />
+					</h:panelGrid>
+				</h:form>
+			</p:tab>
+		</p:accordionPanel>
 
-                <p:commandButton value="Cadastrar" action="#{taskController.addTask}" 
-                                 update="@form :formTabela:tabelaTasks" 
-                                 icon="pi pi-check" styleClass="ui-button-primary" />
-            </p:panel>
-        </h:form>
+		<h:form id="formCadastro">
+			<p:growl id="msgs" showDetail="true" />
+			<p:panel
+				header="#{taskController.task.id == null ? 'Nova Tarefa' : 'Editar Tarefa'}"
+				styleClass="mb-4">
+				<h:panelGrid columns="4" cellpadding="7">
+					<p:outputLabel for="titulo" value="Título:" />
+					<p:inputText id="titulo" value="#{taskController.task.title}"
+						required="true" />
 
-        <h:form id="formTabela">
-            <p:dataTable id="tabelaTasks" value="#{taskController.tasksList}" var="t" 
-                         styleClass="mt-4" emptyMessage="Nenhuma tarefa pendente."
-                         stripedRows="true">
-                
-                <p:column headerText="ID" width="50">
-                    <h:outputText value="#{t.id}" />
-                </p:column>
+					<p:outputLabel for="responsavel" value="Responsável:" />
+					<p:selectOneMenu id="responsavel"
+						value="#{taskController.task.responsible}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem itemLabel="Selecione..." itemValue="" />
+						<f:selectItems value="#{taskController.resposibleList}" var="r"
+							itemLabel="#{r.name}" itemValue="#{r}" />
+					</p:selectOneMenu>
 
-                <p:column headerText="Título">
-                    <h:outputText value="#{t.title}" />
-                </p:column>
+					<p:outputLabel for="descricao" value="Descrição:" />
+					<p:inputTextarea id="descricao"
+						value="#{taskController.task.description}" rows="2" />
 
-                <p:column headerText="Responsável">
-                    <h:outputText value="#{t.responsible.name}" />
-                </p:column>
+					<p:outputLabel for="prioridade" value="Prioridade:" />
+					<p:selectOneMenu id="prioridade"
+						value="#{taskController.task.priorityLevel}">
+						<f:selectItems value="#{taskController.priorities}" var="p"
+							itemLabel="#{p.description}" itemValue="#{p}" />
+					</p:selectOneMenu>
 
-                <p:column headerText="Prioridade">
-                    <h:outputText value="#{t.priorityLevel.description}" />
-                </p:column>
+					<p:outputLabel for="deadline" value="Prazo (Deadline):" />
+					<p:datePicker id="deadline" value="#{taskController.task.deadline}"
+						pattern="dd/MM/yyyy" showIcon="true" mask="true" required="true"
+						requiredMessage="O prazo é obrigatório" />
+				</h:panelGrid>
+				<p:commandButton value="Salvar Tarefa"
+					action="#{taskController.save()}"
+					update="@form :formTabela:tabelaTasks" icon="pi pi-save"
+					styleClass="mt-2" />
+			</p:panel>
+		</h:form>
 
-                <p:column headerText="Deadline">
-                    <h:outputText value="#{t.deadline}">
-                        <f:convertDateTime pattern="dd/MM/yyyy" />
-                    </h:outputText>
-                </p:column>
+		<h:form id="formTabela">
+			<p:dataTable id="tabelaTasks" value="#{taskController.tasksList}"
+				var="t" stripedRows="true" paginator="true" rows="10">
+				<p:column headerText="ID" width="50">#{t.id}</p:column>
+				<p:column headerText="Título">#{t.title}</p:column>
+				<p:column headerText="Responsável">#{t.responsible.name}</p:column>
 
-                <p:column headerText="Ações" width="100">
-                    <p:commandButton icon="pi pi-trash" action="#{taskController.removeTask(t.id)}"
-                                     update="tabelaTasks :formCadastro:msgs"
-                                     styleClass="ui-button-danger ui-button-flat" />
-                </p:column>
-            </p:dataTable>
-        </h:form>
-    </div>
+				<p:column headerText="Ações" width="180" style="text-align: center">
+
+					<h:panelGroup rendered="#{t.statusTask != 'CONCLUIDA'}">
+						<p:commandButton icon="pi pi-check-circle"
+							action="#{taskController.concludeTask(t.id)}"
+							update="@form :formCadastro:msgs"
+							styleClass="ui-button-success ui-button-flat" title="Concluir" />
+
+						<p:commandButton icon="pi pi-pencil"
+							action="#{taskController.prepareEdit(t)}" update=":formCadastro"
+							styleClass="ui-button-warning ui-button-flat" title="Editar" />
+
+						<p:commandButton icon="pi pi-trash"
+							action="#{taskController.removeTask(t.id)}"
+							update="@form :formCadastro:msgs" process="@this"
+							styleClass="ui-button-danger ui-button-flat" title="Excluir">
+							<f:setPropertyActionListener value="#{t}"
+								target="#{taskController.task}" />
+							<p:confirm header="Confirmação" message="Excluir tarefa?"
+								icon="pi pi-exclamation-triangle" />
+						</p:commandButton>
+					</h:panelGroup>
+
+					<h:panelGroup rendered="#{t.statusTask == 'CONCLUIDA'}">
+						<p:tag value="Concluída" severity="success" icon="pi pi-check"
+							rounded="true" />
+					</h:panelGroup>
+
+				</p:column>
+			</p:dataTable>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				responsive="true" width="350">
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no ui-button-flat" />
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" />
+			</p:confirmDialog>
+		</h:form>
+	</div>
 </h:body>
 </html>

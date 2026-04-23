@@ -44,7 +44,7 @@ public class Task implements Serializable {
 	private Priority priorityLevel;
 
 	@ManyToOne
-	@JoinColumn(name = "id_responsible", referencedColumnName = "id")
+	@JoinColumn(name = "id_responsible", referencedColumnName = "id", nullable = false)
 	private Responsible responsible;
 	
 	public Task(Long id, String title, String description, Date deadline, Status statusTask, Priority priorityLevel,
