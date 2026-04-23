@@ -27,6 +27,10 @@ public class TaskController implements Serializable {
 	private Task task = new Task();
 	private List<Task> tasksList;
 	private List<Responsible> resposibleList;
+	private Long idFilter;
+	private String titleDescriptionFilter;
+	private Responsible responsibleFilter;
+	private enums.Status statusFilter;
 
 	@PostConstruct
 	public void init() {
@@ -34,7 +38,12 @@ public class TaskController implements Serializable {
 	}
 
 	public void list() {
-		tasksList = taskrepository.listarPendentes();
+		if (idFilter != null || (titleDescriptionFilter != null && !titleDescriptionFilter.isEmpty())
+				|| responsibleFilter != null || statusFilter != null) {
+			tasksList = taskrepository.filterTasks(idFilter, titleDescriptionFilter, responsibleFilter, statusFilter);
+		} else {
+			tasksList = taskrepository.listAll();
+		}
 		resposibleList = responsibleRepository.getAllResponsibles();
 	}
 
@@ -43,8 +52,8 @@ public class TaskController implements Serializable {
 		return tasksList;
 	}
 
-	public void addTask() {
-		taskrepository.createTask(task);
+	public void save() {
+		taskrepository.saveTask(task);
 		task = new Task();
 		list();
 	}
@@ -62,6 +71,47 @@ public class TaskController implements Serializable {
 		return enums.Status.values();
 	}
 
+	public void clearFilters() {
+		idFilter = null;
+		titleDescriptionFilter = null;
+		responsibleFilter = null;
+		statusFilter = null;
+		list();
+	}
+
+	public void concludeTask(Long id) {
+		taskrepository.concludeTask(id);
+		list();
+	}
+
+	public void prepareEdit(Task t) {
+		this.task = t;
+	}
+
+	public Long getIdFilter() {
+		return idFilter;
+	}
+
+	public void setIdFilter(Long idFilter) {
+		this.idFilter = idFilter;
+	}
+
+	public String getTitleDescriptionFilter() {
+		return titleDescriptionFilter;
+	}
+
+	public void setTitleDescriptionFilter(String titleDescriptionFilter) {
+		this.titleDescriptionFilter = titleDescriptionFilter;
+	}
+
+	public Responsible getResponsibleFilter() {
+		return responsibleFilter;
+	}
+
+	public void setResponsibleFilter(Responsible responsibleFilter) {
+		this.responsibleFilter = responsibleFilter;
+	}
+
 	public TaskRepository getTaskrepository() {
 		return taskrepository;
 	}
@@ -72,6 +122,15 @@ public class TaskController implements Serializable {
 
 	public Task getTask() {
 		return task;
+	}
+	
+	
+	public enums.Status getStatusFilter() {
+		return statusFilter;
+	}
+
+	public void setStatusFilter(enums.Status statusFilter) {
+		this.statusFilter = statusFilter;
 	}
 
 	public void setTask(Task task) {
@@ -85,8 +144,6 @@ public class TaskController implements Serializable {
 	public void setTasksList(List<Task> tasksList) {
 		this.tasksList = tasksList;
 	}
-	
-	
 
 	public ResponsibleRepository getResponsibleRepository() {
 		return responsibleRepository;
